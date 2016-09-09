@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="number_words">
+        <item>one</item>
+        <item>two</item>
+        <item>three</item>
+        <item>four</item>
+        <item>five</item>
+        <item>six</item>
+        <item>seven</item>
+        <item>eight</item>
+        <item>nine</item>
+        <item>ten</item>
+    </string-array>
+
+    <string-array name="miwok_number_words">
+        <item>lutti</item>
+        <item>otikko</item>
+        <item>tolookosu</item>
+        <item>oyyisa</item>
+        <item>massokka</item>
+        <item>temmokka</item>
+        <item>kenekaku</item>
+        <item>kawinta</item>
+        <item>wo\'e</item>
+        <item>na\'aacha</item>
+    </string-array>
+
+    <array name="number_words_image_id">
+        <item>@drawable/number_one</item>
+        <item>@drawable/number_two</item>
+        <item>@drawable/number_three</item>
+        <item>@drawable/number_four</item>
+        <item>@drawable/number_five</item>
+        <item>@drawable/number_six</item>
+        <item>@drawable/number_seven</item>
+        <item>@drawable/number_eight</item>
+        <item>@drawable/number_nine</item>
+        <item>@drawable/number_ten</item>
+    </array>
+
+    <string-array name="family_members_words">
+        <item>father</item>
+        <item>mother</item>
+        <item>son</item>
+        <item>daughter</item>
+        <item>older brother</item>
+        <item>younger brother</item>
+        <item>older sister</item>
+        <item>younger sister</item>
+        <item>grandmother</item>
+        <item>grandfather</item>
+    </string-array>
+
+    <string-array name="family_members_miwok_words">
+        <item>әpә</item>
+        <item>әṭa</item>
+        <item>angsi</item>
+        <item>tune</item>
+        <item>taachi</item>
+        <item>chalitti</item>
+        <item>teṭe</item>
+        <item>kolliti</item>
+        <item>ama</item>
+        <item>paapa</item>
+    </string-array>
+
+    <array name="family_members_image_id">
+        <item>@drawable/family_father</item>
+        <item>@drawable/family_mother</item>
+        <item>@drawable/family_son</item>
+        <item>@drawable/family_daughter</item>
+        <item>@drawable/family_older_brother</item>
+        <item>@drawable/family_younger_brother</item>
+        <item>@drawable/family_older_sister</item>
+        <item>@drawable/family_younger_sister</item>
+        <item>@drawable/family_grandmother</item>
+        <item>@drawable/family_grandfather</item>
+    </array>
+
+    <string-array name="colors_words">
+        <item>red</item>
+        <item>green</item>
+        <item>brown</item>
+        <item>gray</item>
+        <item>black</item>
+        <item>white</item>
+        <item>dusty yellow</item>
+        <item>mustard yellow</item>
+    </string-array>
+
+    <string-array name="colors_miwok_words">
+        <item>weṭeṭṭi</item>
+        <item>chokokki</item>
+        <item>ṭakaakki</item>
+        <item>ṭopoppi</item>
+        <item>kululli</item>
+        <item>kelelli</item>
+        <item>ṭopiisә</item>
+        <item>chiwiiṭә</item>
+    </string-array>
+
+    <array name="colors_image_id">
+        <item>@drawable/color_red</item>
+        <item>@drawable/color_green</item>
+        <item>@drawable/color_brown</item>
+        <item>@drawable/color_gray</item>
+        <item>@drawable/color_black</item>
+        <item>@drawable/color_white</item>
+        <item>@drawable/color_dusty_yellow</item>
+        <item>@drawable/color_mustard_yellow</item>
+
+    </array>
+
+    <string-array name="phrases_words">
+        <item>Where are you going?</item>
+        <item>What is your name?</item>
+        <item>My name is...</item>
+        <item>How are you feeling?</item>
+        <item>I\'m feeling good.</item>
+        <item>Are you coming?</item>
+        <item>Yes, I\'m coming.</item>
+        <item>I\'m coming.</item>
+        <item>Let\'s go.</item>
+        <item>Come here.</item>
+    </string-array>
+
+    <string-array name="phrases_miwok_words">
+        <item>minto wuksus</item>
+        <item>innә oyaase\'nә</item>
+        <item>oyaaset...</item>
+        <item>michәksәs?</item>
+        <item>kuchi achit</item>
+        <item>әәnәs\'aa?</item>
+        <item>hәә’ әәnәm</item>
+        <item>әәnәm</item>
+        <item>yoowutis</item>
+        <item>әnni\'nem</item>
+    </string-array>
+
+</resources>
