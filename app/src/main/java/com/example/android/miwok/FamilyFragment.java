@@ -4,22 +4,26 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class NumbersActivity extends AppCompatActivity {
+public class FamilyFragment extends Fragment {
 
-    private final String LOG_TAG = NumbersActivity.this.getClass().getSimpleName();
+    private final String LOG_TAG = FamilyFragment.this.getClass().getSimpleName();
+
     final ArrayList<Word> words = new ArrayList<>();
 
-    private MediaPlayer mMediaPlayer;
+    MediaPlayer mMediaPlayer;
     private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mp) {
@@ -35,10 +39,10 @@ public class NumbersActivity extends AppCompatActivity {
                         // Pause playback because your Audio Focus was
                         // temporarily stolen, but will be back soon.
                         // i.e. for a phone call
-                        if(mMediaPlayer != null) {
-                            mMediaPlayer.pause();
-                            mMediaPlayer.seekTo(0);
-                        }
+
+                        mMediaPlayer.pause();
+                        mMediaPlayer.seekTo(0);
+
                     }else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                         // Stop playback, because you lost the Audio Focus.
                         // i.e. the user started some other playback app
@@ -53,36 +57,32 @@ public class NumbersActivity extends AppCompatActivity {
                         // are finished
                         // If you implement ducking and lower the volume, be
                         // sure to return it to normal here, as well.
-                        if(mMediaPlayer != null) mMediaPlayer.start();
+                        mMediaPlayer.start();
                     }
                 }
             };
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-        mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-
-        final ArrayList<String> default_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.number_words)));
-        ArrayList<String> miwok_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.miwok_number_words)));
-        TypedArray words_image_id = getResources().obtainTypedArray(R.array.number_words_image_id);
-
-        //final ArrayList<Word> words = new ArrayList<>();
+        final ArrayList<String> default_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.family_members_words)));
+        ArrayList<String> miwok_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.family_members_miwok_words)));
+        TypedArray words_image_id = getResources().obtainTypedArray(R.array.family_members_image_id);
 
         for(int i=0; i < default_words.size(); i++){
             words.add(new Word(default_words.get(i),
                     miwok_words.get(i),
-                    words_image_id.getResourceId(i,0), getResources().getIdentifier("number_" + default_words.get(i).replaceAll(" ","_"), "raw", getPackageName())));
+                    words_image_id.getResourceId(i, 0),
+                    getResources().getIdentifier("family_" + default_words.get(i).replaceAll(" ","_"), "raw", getActivity().getPackageName())));
         }
 
-        ListView listView = (ListView) findViewById(R.id.list);
-        WordAdapter wordAdapter = new WordAdapter(this, words, R.color.category_numbers);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        WordAdapter wordAdapter = new WordAdapter(getActivity(), words, R.color.category_family);
         listView.setAdapter(wordAdapter);
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,16 +91,18 @@ public class NumbersActivity extends AppCompatActivity {
                 playAudioClip(position);
             }
         });
+
+        return rootView;
     }
 
     /*
-     * Play audio clip
-     */
+    * Play audio clip
+    */
     private void playAudioClip(int position){
         int result = mAudioManager.requestAudioFocus(afChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
         if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            mMediaPlayer = MediaPlayer.create(NumbersActivity.this, words.get(position).getSoundResourceId());
+            mMediaPlayer = MediaPlayer.create(getContext(), words.get(position).getSoundResourceId());
             mMediaPlayer.start();
             mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
         }
@@ -126,8 +128,9 @@ public class NumbersActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         releaseMediaPlayer();
     }
+
 }

@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PhrasesActivity"
+        <activity android:name=".PhrasesFragment"
             android:label="@string/category_phrases"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -38,7 +38,7 @@
                 android:value=".MainActivity"/>
             </activity>
 
-        <activity android:name=".NumbersActivity"
+        <activity android:name=".NumbersFragment"
             android:label="@string/category_numbers"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -46,7 +46,7 @@
                 android:value=".MainActivity"/>
         </activity>
 
-        <activity android:name=".FamilyActivity"
+        <activity android:name=".FamilyFragment"
             android:label="@string/category_family"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -54,7 +54,7 @@
                 android:value=".MainActivity"/>
         </activity>
 
-        <activity android:name=".ColorsActivity"
+        <activity android:name=".ColorsFragment"
             android:label="@string/category_colors"
             android:parentActivityName=".MainActivity">
             <meta-data

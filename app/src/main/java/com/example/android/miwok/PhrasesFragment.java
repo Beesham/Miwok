@@ -1,19 +1,25 @@
 package com.example.android.miwok;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ColorsActivity extends AppCompatActivity {
+public class PhrasesFragment extends Fragment {
+
+    private final String LOG_TAG = PhrasesFragment.this.getClass().getSimpleName();
 
     final ArrayList<Word> words = new ArrayList<>();
 
@@ -56,27 +62,25 @@ public class ColorsActivity extends AppCompatActivity {
                 }
             };
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-        mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-
-        final ArrayList<String> default_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.colors_words)));
-        ArrayList<String> miwok_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.colors_miwok_words)));
-        TypedArray words_image_id = getResources().obtainTypedArray(R.array.colors_image_id);
+        final ArrayList<String> default_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.phrases_words)));
+        ArrayList<String> miwok_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.phrases_miwok_words)));
 
         for(int i=0; i < default_words.size(); i++){
             words.add(new Word(default_words.get(i),
                     miwok_words.get(i),
-                    words_image_id.getResourceId(i,0), getResources().getIdentifier("color_" + default_words.get(i).replaceAll(" ","_"), "raw", getPackageName())));
+                    getResources().getIdentifier("phrase_" +
+                            default_words.get(i).replaceAll(" ","_").replaceAll("[.?',]","").toLowerCase(), "raw", getActivity().getPackageName())));
         }
 
-        ListView listView = (ListView) findViewById(R.id.list);
-        WordAdapter wordAdapter = new WordAdapter(this, words, R.color.category_colors);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        WordAdapter wordAdapter = new WordAdapter(getActivity(), words, R.color.category_phrases);
         listView.setAdapter(wordAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,6 +90,8 @@ public class ColorsActivity extends AppCompatActivity {
                 playAudioClip(position);
             }
         });
+
+        return rootView;
     }
 
     /*
@@ -95,7 +101,7 @@ public class ColorsActivity extends AppCompatActivity {
         int result = mAudioManager.requestAudioFocus(afChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
         if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            mMediaPlayer = MediaPlayer.create(ColorsActivity.this, words.get(position).getSoundResourceId());
+            mMediaPlayer = MediaPlayer.create(getContext(), words.get(position).getSoundResourceId());
             mMediaPlayer.start();
             mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
         }
@@ -121,7 +127,7 @@ public class ColorsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         releaseMediaPlayer();
     }

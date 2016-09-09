@@ -1,25 +1,28 @@
 package com.example.android.miwok;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PhrasesActivity extends AppCompatActivity {
+public class NumbersFragment extends Fragment {
 
-    private final String LOG_TAG = PhrasesActivity.this.getClass().getSimpleName();
-
+    private final String LOG_TAG = NumbersFragment.this.getClass().getSimpleName();
     final ArrayList<Word> words = new ArrayList<>();
 
-    MediaPlayer mMediaPlayer;
+    private MediaPlayer mMediaPlayer;
     private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mp) {
@@ -58,27 +61,31 @@ public class PhrasesActivity extends AppCompatActivity {
                 }
             };
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-        final ArrayList<String> default_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.phrases_words)));
-        ArrayList<String> miwok_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.phrases_miwok_words)));
+        final ArrayList<String> default_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.number_words)));
+        ArrayList<String> miwok_words = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.miwok_number_words)));
+        TypedArray words_image_id = getResources().obtainTypedArray(R.array.number_words_image_id);
+
+        //final ArrayList<Word> words = new ArrayList<>();
 
         for(int i=0; i < default_words.size(); i++){
             words.add(new Word(default_words.get(i),
                     miwok_words.get(i),
-                    getResources().getIdentifier("phrase_" + default_words.get(i).replaceAll(" ","_").replaceAll("[.?',]","").toLowerCase(), "raw", getPackageName())));
+                    words_image_id.getResourceId(i,0), getResources().getIdentifier("number_" + default_words.get(i).replaceAll(" ","_"), "raw", getActivity().getPackageName())));
         }
 
-        ListView listView = (ListView) findViewById(R.id.list);
-        WordAdapter wordAdapter = new WordAdapter(this, words, R.color.category_phrases);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        WordAdapter wordAdapter = new WordAdapter(getActivity(), words, R.color.category_numbers);
         listView.setAdapter(wordAdapter);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,16 +94,24 @@ public class PhrasesActivity extends AppCompatActivity {
                 playAudioClip(position);
             }
         });
+
+        return rootView;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     /*
-    * Play audio clip
-    */
+     * Play audio clip
+     */
     private void playAudioClip(int position){
         int result = mAudioManager.requestAudioFocus(afChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
         if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            mMediaPlayer = MediaPlayer.create(PhrasesActivity.this, words.get(position).getSoundResourceId());
+            mMediaPlayer = MediaPlayer.create(getActivity(), words.get(position).getSoundResourceId());
             mMediaPlayer.start();
             mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
         }
@@ -122,7 +137,7 @@ public class PhrasesActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         releaseMediaPlayer();
     }
